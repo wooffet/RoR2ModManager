@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
 import { StepOneComponent } from './step-one/step-one.component';
 import { StepTwoComponent } from './step-two/step-two.component';
 import { StepThreeComponent } from './step-three/step-three.component';
-import { MatStepper } from '@angular/material';
+import { MatStepper } from '@angular/material/stepper';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ProfileService } from '../../../profile/services/profile.service';
 import { ElectronService } from '../../../core/services/electron.service';

@@ -4,11 +4,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SharedModule } from '../../shared/shared.module';
 import { PackageTableComponent } from './package-table/package-table.component';
 import { PackagesPageComponent } from './packages-page/packages-page.component';
-import {
-  MatSortModule,
-  MatPaginatorModule,
-  MatStepperModule
-} from '@angular/material';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatStepperModule } from '@angular/material/stepper';
 import { PackageDetailsComponent } from './package-details/package-details.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { StepTwoComponent } from './packages-page/step-two/step-two.component';

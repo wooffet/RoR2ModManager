@@ -3,7 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NavMenuComponent } from './nav-menu.component';
 import { MaterialModule } from '../../../shared/material.module';
-import { MatToolbarModule, MatSidenavModule } from '@angular/material';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { ThemeService } from '../../../core/services/theme.service';
 import { RouterTestingModule } from '@angular/router/testing';
 import {

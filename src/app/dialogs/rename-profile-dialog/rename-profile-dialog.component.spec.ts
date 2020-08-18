@@ -8,7 +8,7 @@ import {
 } from '../../core/services/mocks.spec';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../shared/material.module';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('RenameProfileDialogComponent', () => {

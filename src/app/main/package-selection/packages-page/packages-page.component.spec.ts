@@ -9,7 +9,7 @@ import {
   MockTranslatePipe
 } from '../../../core/services/mocks.spec';
 import { MaterialModule } from '../../../shared/material.module';
-import { MatStepperModule } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
 import { Component, Input } from '@angular/core';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ProfileService } from '../../../profile/services/profile.service';

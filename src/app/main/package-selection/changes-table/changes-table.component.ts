@@ -7,7 +7,8 @@ import {
 } from '@angular/core';
 import { PackageService } from '../../services/package.service';
 import { Subscription } from 'rxjs';
-import { MatTableDataSource, MatSort } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { PreferencesService } from '../../../core/services/preferences.service';
 
 interface TableRow {

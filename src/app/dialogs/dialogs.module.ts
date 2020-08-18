@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { DialogsRoutingModule } from './dialogs-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
 import { NewProfileDialogComponent } from './new-profile-dialog/new-profile-dialog.component';
 import { DialogService } from './services/dialog.service';
 import { RenameProfileDialogComponent } from './rename-profile-dialog/rename-profile-dialog.component';
