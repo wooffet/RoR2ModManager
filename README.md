@@ -1,3 +1,18 @@
+# **Fork Information**
+
+## **This is forked from [RoR2ModManager](https://github.com/scottbot95/RoR2ModManager) made by [scottbot95](https://github.com/scottbot95/RoR2ModManager).**
+
+### **The aim of this fork is to:**
+
+- Add some features I thought would be useful
+- Add some features that there were open issues for at some point in time
+- Update libraries flagged by dependabot
+- Hopefully get changes accepted in pull requests to the original branch
+
+I noticed the project does not seem to have been updated in some time. By working on this fork I can hopefully help reduce the burden on the original author, and help provide a better user experience.
+
+The original readme content is preserved below.\
+\
 [![Angular Logo](https://www.vectorlogo.zone/logos/angular/angular-icon.svg)](https://angular.io/) [![Electron Logo](https://www.vectorlogo.zone/logos/electronjs/electronjs-icon.svg)](https://electronjs.org/)
 
 [![Travis Build Status][build-badge]][build]
@@ -16,16 +31,16 @@ A simple mod manager for Risk of Rain 2 build using Angular and Electron.
 
 - Browse all mods available from thunderstore.io
 - Handles the install button on thunderstore.io
-    - Currently it just marks package for install
+  - Currently it just marks package for install
     - You then have to click apply for install the mod
 - Install and uninstall selected mods
-    - Also installs all necessary dependencies
+  - Also installs all necessary dependencies
 - Update mods
 - Very primative import/export system
-    - Many improvements to come
+  - Many improvements to come
 - Open various useful folder from menu
 - Internal config editor for (some) installed mods
-    - For most mods, you need to run the game at least once for the config editor
+  - For most mods, you need to run the game at least once for the config editor
     to find the config files
 - Download updates to mod manager automatically in the background and apply them on restart
 
