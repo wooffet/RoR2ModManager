@@ -14,7 +14,7 @@ import { DialogService } from '../services/dialog.service';
   styleUrls: ['./new-profile-dialog.component.scss']
 })
 export class NewProfileDialogComponent implements OnInit {
-  @ViewChild('profileForm') formElem: FormGroupDirective;
+  @ViewChild('profileForm', { static: true }) formElem: FormGroupDirective;
   form: FormGroup;
 
   profiles: Observable<string[]>;

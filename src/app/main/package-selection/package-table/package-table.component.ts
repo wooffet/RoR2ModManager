@@ -46,8 +46,8 @@ interface ColumnInfo {
   styleUrls: ['./package-table.component.scss']
 })
 export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
   @Input() formGroup: FormGroup;
   @Input() applyChanges: (changes: PackageChangeset) => void;
 

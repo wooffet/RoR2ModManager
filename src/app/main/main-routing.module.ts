@@ -26,7 +26,7 @@ const routes: Routes = [
       },
       {
         path: 'config-editor',
-        loadChildren: './config-editor/config-editor.module#ConfigEditorModule'
+        loadChildren: () => import('./config-editor/config-editor.module').then(m => m.ConfigEditorModule)
       }
     ]
   }

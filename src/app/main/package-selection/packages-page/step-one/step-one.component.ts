@@ -25,7 +25,7 @@ export class StepOneComponent implements OnInit {
   public formStep1: FormGroup;
   public selectedPackage = this.packages.selectedPackage;
 
-  @ViewChild('nextButton') nextButton: ElementRef;
+  @ViewChild('nextButton', { static: true }) nextButton: ElementRef;
 
   showErrors = false;
 

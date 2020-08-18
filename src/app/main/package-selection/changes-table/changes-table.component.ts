@@ -37,7 +37,7 @@ export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
     'versionToInstall'
   ];
 
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public readonly dataSource = new MatTableDataSource([]);
 

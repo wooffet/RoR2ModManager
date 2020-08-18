@@ -23,10 +23,10 @@ import { ElectronService } from '../../../core/services/electron.service';
   }
 })
 export class PackagesPageComponent implements OnInit, OnDestroy {
-  @ViewChild(StepOneComponent) stepOneComponent: StepOneComponent;
-  @ViewChild(StepTwoComponent) stepTwoComponent: StepTwoComponent;
-  @ViewChild(StepThreeComponent) stepThreeComponent: StepThreeComponent;
-  @ViewChild(MatStepper) stepper: MatStepper;
+  @ViewChild(StepOneComponent, { static: true }) stepOneComponent: StepOneComponent;
+  @ViewChild(StepTwoComponent, { static: true }) stepTwoComponent: StepTwoComponent;
+  @ViewChild(StepThreeComponent, { static: true }) stepThreeComponent: StepThreeComponent;
+  @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
 
   editable = true;
 
