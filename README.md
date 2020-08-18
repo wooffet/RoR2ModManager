@@ -1,8 +1,8 @@
 # **Fork Information**
 
-## **This is forked from [RoR2ModManager](https://github.com/scottbot95/RoR2ModManager) made by [scottbot95](https://github.com/scottbot95/RoR2ModManager).**
+**This is forked from [RoR2ModManager](https://github.com/scottbot95/RoR2ModManager) made by [scottbot95](https://github.com/scottbot95/RoR2ModManager).**
 
-### **The aim of this fork is to:**
+**The aim of this fork is to:**
 
 - Add some features I thought would be useful
 - Add some features that there were open issues for at some point in time
