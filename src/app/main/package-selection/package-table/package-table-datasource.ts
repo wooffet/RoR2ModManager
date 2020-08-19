@@ -7,13 +7,13 @@ import {
   merge,
   Subscription,
   BehaviorSubject,
-  Subject
+  Subject,
 } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { PreferencesService } from '../../../core/services/preferences.service';
 import {
   PackageService,
-  SelectablePackage
+  SelectablePackage,
 } from '../../services/package.service';
 import { HumanizePipe } from '../../../shared/humanize.pipe';
 
@@ -61,7 +61,7 @@ export class PackageTableDataSource extends DataSource<SelectablePackage> {
     private prefs: PreferencesService
   ) {
     super();
-    this.dataSource.subscribe(data => {
+    this.dataSource.subscribe((data) => {
       this.data = data;
       this.filteredData = sortPackages(
         this.getFilteredData(data),
@@ -85,14 +85,11 @@ export class PackageTableDataSource extends DataSource<SelectablePackage> {
       this.dataSource,
       this.paginator.page,
       this.sort.sortChange,
-      this.filter.valueChanges.pipe(
-        distinctUntilChanged(),
-        debounceTime(100)
-      )
+      this.filter.valueChanges.pipe(distinctUntilChanged(), debounceTime(100)),
     ];
 
     this.subscription.add(
-      this.packages.allPackages$.subscribe(packages => {
+      this.packages.allPackages$.subscribe((packages) => {
         if (packages) {
           this.dataSource.next(packages);
           this.loadingSource.next(false);
@@ -118,9 +115,7 @@ export class PackageTableDataSource extends DataSource<SelectablePackage> {
       tap(() => {
         this.changedSource.next(this.data);
       }),
-      map(() => {
-        return this.getPagedData(this.getSortedData([...this.filteredData]));
-      })
+      map(() => this.getPagedData(this.getSortedData([...this.filteredData])))
     );
   }
 
@@ -167,7 +162,7 @@ export class PackageTableDataSource extends DataSource<SelectablePackage> {
     const filterText = (this.filter.value as string).toLowerCase();
     if (filterText && filterText.length > 0) {
       return data.filter(
-        pkg =>
+        (pkg) =>
           new HumanizePipe()
             .transform(pkg.name, this.prefs.get('humanizePackageNames'))
             .toLowerCase()

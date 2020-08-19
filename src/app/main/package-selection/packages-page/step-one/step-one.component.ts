@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors } from '@angular/forms';
 import {
   PackageChangeset,
-  PackageService
+  PackageService,
 } from '../../../services/package.service';
 
 const packageChangesValidator = (group: FormGroup): ValidationErrors => {
@@ -19,7 +19,7 @@ const packageChangesValidator = (group: FormGroup): ValidationErrors => {
 @Component({
   selector: 'app-step-one',
   templateUrl: './step-one.component.html',
-  styleUrls: ['./step-one.component.scss']
+  styleUrls: ['./step-one.component.scss'],
 })
 export class StepOneComponent implements OnInit {
   public formStep1: FormGroup;
@@ -33,7 +33,7 @@ export class StepOneComponent implements OnInit {
 
   ngOnInit() {
     this.formStep1 = this.fb.group(new PackageChangeset(), {
-      validators: [packageChangesValidator]
+      validators: [packageChangesValidator],
     });
   }
 

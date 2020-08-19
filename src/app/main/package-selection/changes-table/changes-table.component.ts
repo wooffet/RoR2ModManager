@@ -3,7 +3,7 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
-  AfterViewInit
+  AfterViewInit,
 } from '@angular/core';
 import { PackageService } from '../../services/package.service';
 import { Subscription } from 'rxjs';
@@ -22,7 +22,7 @@ interface TableRow {
 @Component({
   selector: 'app-changes-table',
   templateUrl: './changes-table.component.html',
-  styleUrls: ['./changes-table.component.scss']
+  styleUrls: ['./changes-table.component.scss'],
 })
 export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
@@ -35,7 +35,7 @@ export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
     'author',
     'action',
     'installedVersion',
-    'versionToInstall'
+    'versionToInstall',
   ];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -52,13 +52,13 @@ export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.subscription.add(
-      this.prefs.onChange('humanizePackageNames').subscribe(val => {
+      this.prefs.onChange('humanizePackageNames').subscribe((val) => {
         this.shouldHumanize = val.newValue;
       })
     );
 
     this.subscription.add(
-      this.packages.pendingChanges.subscribe(changeset => {
+      this.packages.pendingChanges.subscribe((changeset) => {
         this.dataSource.data = [
           ...Array.from(changeset.updated).map(
             (ver): TableRow => ({
@@ -68,7 +68,7 @@ export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
               versionToInstall: ver.version.version,
               installedVersion:
                 ver.pkg.installedVersion &&
-                ver.pkg.installedVersion.version.version
+                ver.pkg.installedVersion.version.version,
             })
           ),
           ...Array.from(changeset.removed).map(
@@ -76,9 +76,9 @@ export class ChangesTableComponent implements OnInit, OnDestroy, AfterViewInit {
               action: 'uninstall',
               name: pkg.name,
               author: pkg.owner,
-              installedVersion: pkg.installedVersion.version.version
+              installedVersion: pkg.installedVersion.version.version,
             })
-          )
+          ),
         ];
       })
     );

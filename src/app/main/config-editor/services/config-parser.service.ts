@@ -34,10 +34,9 @@ export class ConfigParserService {
   public async parseFile(filename: string): Promise<ConfigMap> {
     const fullname = this.getConfigPath(filename);
 
-    const rawInput = (await this.electron.fs.readFile(
-      fullname,
-      'utf8'
-    )).replace(/^\uFEFF/, '');
+    const rawInput = (
+      await this.electron.fs.readFile(fullname, 'utf8')
+    ).replace(/^\uFEFF/, '');
 
     return this.parseString(rawInput);
   }
@@ -59,9 +58,7 @@ export class ConfigParserService {
 
         if (obj[key].type !== 'object')
           throw new ParseError(
-            `Cannot have subsection and key with same name. Existing type ${
-              obj[key].type
-            }`
+            `Cannot have subsection and key with same name. Existing type ${obj[key].type}`
           );
 
         obj = obj[key].value as ConfigMap;
@@ -69,7 +66,7 @@ export class ConfigParserService {
       obj[keys[keys.length - 1]] = {
         type: 'object',
         value: this.parseSectionBody(body),
-        name: keys[keys.length - 1]
+        name: keys[keys.length - 1],
       };
       i += 2;
     }
@@ -135,7 +132,7 @@ export class ConfigParserService {
   serializeDescription(input: string): string {
     return input
       .split(/\n\r?/)
-      .map(l => `# ${l}\n`)
+      .map((l) => `# ${l}\n`)
       .join('');
   }
 
@@ -160,8 +157,8 @@ export class ConfigParserService {
     const body: ConfigMap = {};
     const lines = raw
       .split(/\n\r?/)
-      .map(l => l.trimLeft())
-      .filter(l => l.length > 0);
+      .map((l) => l.trimLeft())
+      .filter((l) => l.length > 0);
 
     let foundDescription: string;
 
@@ -188,7 +185,7 @@ export class ConfigParserService {
         body[key] = {
           type: 'boolean',
           value: rawValue.toLowerCase() === 'true',
-          name: key
+          name: key,
         };
       } else {
         let str = rawValue;
@@ -198,7 +195,7 @@ export class ConfigParserService {
         body[key] = {
           type: 'string',
           value: str,
-          name: key
+          name: key,
         };
       }
 
@@ -215,5 +212,5 @@ export class ConfigParserService {
 export const getPossibleConfigFilenames = (pkg: Package) => {
   const filenameBase = `${pkg.owner}.${pkg.name}.cfg`;
   if (pkg.uuid4 === BEPINEX_UUID4) return ['BepInEx.cfg'];
-  else return ['com', 'dev'].map(pre => `${pre}.${filenameBase}`);
+  else return ['com', 'dev'].map((pre) => `${pre}.${filenameBase}`);
 };

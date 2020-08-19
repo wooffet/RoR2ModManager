@@ -5,7 +5,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 import {
   SerializedPackageList,
   PackageList,
-  deserializablePackageList
+  deserializablePackageList,
 } from '../models/package.model';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class ThunderstoreService {
 
     const url = `${this.baseUrl}/package`;
     const result = this.http.get<SerializedPackageList>(url).pipe(
-      map(apiPackages => {
+      map((apiPackages) => {
         const packages = deserializablePackageList(apiPackages);
 
         // this.db.savePackages(apiPackages);
@@ -38,10 +38,10 @@ export class ThunderstoreService {
       })
     );
     result.subscribe(
-      packages => {
+      (packages) => {
         this.allPackagesSource.next(packages);
       },
-      err => {
+      (err) => {
         console.error(err);
         // restore old package list in case of failure
         this.allPackagesSource.next(oldPackages);

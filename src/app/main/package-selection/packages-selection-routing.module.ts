@@ -5,12 +5,12 @@ import { PackagesPageComponent } from './packages-page/packages-page.component';
 const routes: Routes = [
   {
     path: 'packages',
-    component: PackagesPageComponent
-  }
+    component: PackagesPageComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PackageSelectionRoutingModule {}

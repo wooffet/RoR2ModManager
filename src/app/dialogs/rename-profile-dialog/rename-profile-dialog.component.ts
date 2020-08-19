@@ -5,13 +5,13 @@ import {
   FormGroup,
   FormBuilder,
   AbstractControl,
-  ValidationErrors
+  ValidationErrors,
 } from '@angular/forms';
 
 @Component({
   selector: 'app-rename-profile-dialog',
   templateUrl: './rename-profile-dialog.component.html',
-  styleUrls: ['./rename-profile-dialog.component.scss']
+  styleUrls: ['./rename-profile-dialog.component.scss'],
 })
 export class RenameProfileDialogComponent implements OnInit {
   public oldName: string;
@@ -28,12 +28,12 @@ export class RenameProfileDialogComponent implements OnInit {
 
   ngOnInit() {
     this.formGroup = this.fb.group({
-      newName: ['', [Validators.required, this.notEqualValidator]]
+      newName: ['', [Validators.required, this.notEqualValidator]],
     });
     this.newName = this.formGroup.get('newName');
 
     this.dialog.dialogReady();
-    this.dialog.dialogInput.subscribe(oldName => {
+    this.dialog.dialogInput.subscribe((oldName) => {
       this.oldName = oldName;
       this.changeDetector.detectChanges();
     });
@@ -46,7 +46,6 @@ export class RenameProfileDialogComponent implements OnInit {
 
   private notEqualValidator = (
     control: AbstractControl
-  ): ValidationErrors | null => {
-    return control.value === this.oldName ? { notEqual: true } : null;
-  };
+  ): ValidationErrors | null =>
+    control.value === this.oldName ? { notEqual: true } : null;
 }

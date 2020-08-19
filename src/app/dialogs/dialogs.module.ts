@@ -10,6 +10,6 @@ import { RenameProfileDialogComponent } from './rename-profile-dialog/rename-pro
 @NgModule({
   declarations: [NewProfileDialogComponent, RenameProfileDialogComponent],
   imports: [SharedModule, DialogsRoutingModule, MatDialogModule],
-  providers: [DialogService]
+  providers: [DialogService],
 })
 export class DialogsModule {}

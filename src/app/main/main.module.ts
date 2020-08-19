@@ -16,8 +16,8 @@ import { ProfileModule } from '../profile/profile.module';
     MainRoutingModule,
     NavMenuModule,
     PackageSelectionModule,
-    ProfileModule
+    ProfileModule,
   ],
-  providers: [PackageService]
+  providers: [PackageService],
 })
 export class MainModule {}

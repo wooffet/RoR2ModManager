@@ -14,7 +14,7 @@ import {
   selector: 'app-changes-table',
   template: '<p>Mock changes table</p>'
 })
-class MockChangesTableComponent {}
+class MockChangesTableComponent { }
 
 describe('StepTwoComponent', () => {
   let component: StepTwoComponent;

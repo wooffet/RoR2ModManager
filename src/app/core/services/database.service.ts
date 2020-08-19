@@ -5,7 +5,7 @@ import {
   SerializedPackage,
   serializePackage,
   serializePackageList,
-  PackageList
+  PackageList,
 } from '../models/package.model';
 import { PackageProfile } from '../models/profile.model';
 
@@ -18,10 +18,10 @@ export class Database extends Dexie {
     super('Database');
     this.version(2).stores({
       packages: '&uuid4,name,owner',
-      profiles: '&name'
+      profiles: '&name',
     });
     this.version(1).stores({
-      packages: '&uuid4,name,owner'
+      packages: '&uuid4,name,owner',
     });
     this.packages.mapToClass(Package);
   }
@@ -68,7 +68,7 @@ export class DatabaseService {
   public async bulkUpdatePackages(packages: PackageList): Promise<number> {
     const serialized = serializePackageList(packages);
     const updates = await Promise.all(
-      serialized.map(async pkg => {
+      serialized.map(async (pkg) => {
         if ((await this.db.packages.update(pkg.uuid4, pkg)) === 0) {
           await this.db.packages.add(pkg);
         }

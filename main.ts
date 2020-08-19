@@ -1,7 +1,7 @@
 // tslint:disable-next-line:no-unused-variable
 import { app, BrowserWindow, Notification, dialog } from 'electron';
 import * as path from 'path';
-import * as Registry from 'winreg';
+import Registry from 'winreg';
 
 import { UserPreferences } from './electron/preferences.model';
 import { prefs } from './electron/prefs';
@@ -18,16 +18,16 @@ app.setAppUserModelId('com.electron.ror2modmanager');
 
 registerIpcListeners();
 registerDownloadManager({
-  downloadPath: path.join(app.getPath('userData'), 'downloadCache')
+  downloadPath: path.join(app.getPath('userData'), 'downloadCache'),
 });
 
 let win: BrowserWindow, serve: boolean;
 const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
+serve = args.some((val) => val === '--serve');
 
 const regKey = new Registry({
   hive: Registry.HKLM,
-  key: `\\SOFTWARE\\${name}`
+  key: `\\SOFTWARE\\${name}`,
 });
 
 // Grab value out of registry
@@ -52,7 +52,7 @@ regKey.get('RoR2Dir', (err, result) => {
 
 function canHandleProtocol(url: string) {
   if (typeof url !== 'string') return false;
-  return protocols.some(p => url.startsWith(`${p}://`));
+  return protocols.some((p) => url.startsWith(`${p}://`));
 }
 
 function createWindow() {
@@ -65,7 +65,7 @@ function createWindow() {
     x,
     y,
     width,
-    height
+    height,
   });
 
   if (prefs.get('windowMaximized')) {
@@ -96,7 +96,7 @@ function createWindow() {
     const watch = require('electron-reload');
     const options = {
       electron: require(path.join(__dirname, 'node_modules', 'electron')),
-      argv: ['--serve']
+      argv: ['--serve'],
     };
     watch(__dirname, options);
     watch(path.join(__dirname, 'electron'), options);

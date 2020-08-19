@@ -17,7 +17,7 @@ export class DialogService {
   private parentWebContents: WebContents;
 
   constructor(private electron: ElectronService, private router: Router) {
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         if (event.url.startsWith('/dialogs/')) {
           this.configureForDialog();

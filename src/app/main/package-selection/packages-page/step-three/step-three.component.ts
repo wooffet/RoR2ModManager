@@ -6,7 +6,7 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PackageService } from '../../../services/package.service';
@@ -16,7 +16,7 @@ import { ScrollToService } from '@nicky-lenaers/ngx-scroll-to';
 @Component({
   selector: 'app-step-three',
   templateUrl: './step-three.component.html',
-  styleUrls: ['./step-three.component.scss']
+  styleUrls: ['./step-three.component.scss'],
 })
 export class StepThreeComponent implements OnInit, OnChanges, OnDestroy {
   @Output() done = new EventEmitter<void>();
@@ -45,10 +45,10 @@ export class StepThreeComponent implements OnInit, OnChanges, OnDestroy {
 
     let logSub: Subscription;
     this.subscription.add(
-      this.packages.log$.subscribe(log => {
+      this.packages.log$.subscribe((log) => {
         if (logSub) logSub.unsubscribe();
         this.logs = [];
-        logSub = log.subscribe(row => {
+        logSub = log.subscribe((row) => {
           this.logs.push(row);
           this.scrollToService.scrollTo({ target: 'bottom', duration: 250 });
         });
@@ -56,7 +56,7 @@ export class StepThreeComponent implements OnInit, OnChanges, OnDestroy {
     );
 
     this.subscription.add(
-      this.packages.applyPercentage$.subscribe(progress => {
+      this.packages.applyPercentage$.subscribe((progress) => {
         this.progress = progress * 100;
       })
     );

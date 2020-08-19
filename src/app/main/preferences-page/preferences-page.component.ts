@@ -7,7 +7,7 @@ import { ElectronService } from '../../core/services/electron.service';
 @Component({
   selector: 'app-preferences-page',
   templateUrl: './preferences-page.component.html',
-  styleUrls: ['./preferences-page.component.scss']
+  styleUrls: ['./preferences-page.component.scss'],
 })
 export class PreferencesPageComponent implements OnInit, OnDestroy {
   constructor(
@@ -41,31 +41,31 @@ export class PreferencesPageComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.darkMode.valueChanges.subscribe(newValue => {
+      this.darkMode.valueChanges.subscribe((newValue) => {
         this.prefs.set('darkMode', newValue);
       })
     );
 
     this.subscription.add(
-      this.respectPinned.valueChanges.subscribe(newValue => {
+      this.respectPinned.valueChanges.subscribe((newValue) => {
         this.prefs.set('respectPinned', newValue);
       })
     );
 
     this.subscription.add(
-      this.humanizePackageNames.valueChanges.subscribe(newValue => {
+      this.humanizePackageNames.valueChanges.subscribe((newValue) => {
         this.prefs.set('humanizePackageNames', newValue);
       })
     );
 
     this.subscription.add(
-      this.checkForPackageUpdates.valueChanges.subscribe(newValue => {
+      this.checkForPackageUpdates.valueChanges.subscribe((newValue) => {
         this.prefs.set('updatePackagesOnStart', newValue);
       })
     );
 
     this.subscription.add(
-      this.appUpdateCheckInterval.valueChanges.subscribe(newValue => {
+      this.appUpdateCheckInterval.valueChanges.subscribe((newValue) => {
         this.prefs.set('appUpdateCheckInterval', newValue);
         console.log(typeof newValue);
       })
@@ -77,16 +77,15 @@ export class PreferencesPageComponent implements OnInit, OnDestroy {
   }
 
   selectRoR2Path() {
-    this.electron.remote.dialog.showOpenDialog(
-      this.electron.remote.getCurrentWindow(),
-      {
-        properties: ['openDirectory']
-      },
-      result => {
+    this.electron.remote.dialog
+      .showOpenDialog(this.electron.remote.getCurrentWindow(), {
+        properties: ['openDirectory'],
+      })
+      .then((result) => {
         if (result) {
-          const path = result[0];
+          const path = result.filePaths[0];
           const { join } = this.electron.path;
-          this.electron.fs.access(join(path, 'Risk of Rain 2.exe'), err => {
+          this.electron.fs.access(join(path, 'Risk of Rain 2.exe'), (err) => {
             if (err) {
               this.electron.showMessageBox(
                 {
@@ -95,9 +94,9 @@ export class PreferencesPageComponent implements OnInit, OnDestroy {
                   type: 'error',
                   buttons: ['Cancel', 'Retry'],
                   defaultId: 1,
-                  cancelId: 0
+                  cancelId: 0,
                 },
-                response => {
+                (response) => {
                   if (response) {
                     this.selectRoR2Path();
                   }
@@ -109,7 +108,6 @@ export class PreferencesPageComponent implements OnInit, OnDestroy {
             }
           });
         }
-      }
-    );
+      });
   }
 }

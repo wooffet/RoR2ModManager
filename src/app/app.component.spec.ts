@@ -16,11 +16,11 @@ import { ProfileService } from './profile/services/profile.service';
   selector: 'app-nav-menu',
   template: '<p>Mock Nav Menu component</p>'
 })
-class MockNavMenuComponent {}
+class MockNavMenuComponent { }
 
 class TranslateServiceStub {
-  setDefaultLang(lang: string): void {}
-  use(lang: string): void {}
+  setDefaultLang(lang: string): void { }
+  use(lang: string): void { }
 }
 
 describe('AppComponent', () => {

@@ -6,7 +6,7 @@ import {
   Input,
   OnInit,
   ChangeDetectorRef,
-  NgZone
+  NgZone,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -15,18 +15,18 @@ import { delay } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
 import {
   PackageTableDataSource,
-  calcPackageDirty
+  calcPackageDirty,
 } from './package-table-datasource';
 import {
   Package,
   PackageList,
   PackageVersion,
-  PackageVersionList
+  PackageVersionList,
 } from '../../../core/models/package.model';
 import {
   PackageChangeset,
   PackageService,
-  SelectablePackage
+  SelectablePackage,
 } from '../../services/package.service';
 import { PreferencesService } from '../../../core/services/preferences.service';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -44,7 +44,7 @@ interface ColumnInfo {
 @Component({
   selector: 'app-package-table',
   templateUrl: './package-table.component.html',
-  styleUrls: ['./package-table.component.scss']
+  styleUrls: ['./package-table.component.scss'],
 })
 export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -68,7 +68,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
     updated: { name: 'Updated' },
     latest: { name: 'Latest Version' },
     downloads: { name: 'Total Downloads' },
-    flags: { name: 'Flags' }
+    flags: { name: 'Flags' },
   };
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -82,7 +82,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'updated',
     'latest',
     'downloads',
-    'flags'
+    'flags',
   ];
   selection: SelectionModel<SelectablePackage>;
 
@@ -123,15 +123,17 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     this.subscription.add(
-      this.prefs.onChange('humanizePackageNames').subscribe(shouldHumanize => {
-        this.shouldHumanize = shouldHumanize.newValue;
-      })
+      this.prefs
+        .onChange('humanizePackageNames')
+        .subscribe((shouldHumanize) => {
+          this.shouldHumanize = shouldHumanize.newValue;
+        })
     );
 
     // update selected status for datasource sorting feature
     this.subscription.add(
-      this.selection.changed.pipe(delay(0)).subscribe(changed => {
-        changed.added.forEach(pkg => {
+      this.selection.changed.pipe(delay(0)).subscribe((changed) => {
+        changed.added.forEach((pkg) => {
           pkg.selected = true;
           pkg.selectedVersion = pkg.selectedVersion || pkg.latestVersion;
           calcPackageDirty(pkg, true);
@@ -142,7 +144,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
             this.changes.updated.add(pkg.selectedVersion);
           }
         });
-        changed.removed.forEach(pkg => {
+        changed.removed.forEach((pkg) => {
           const { selectedVersion } = pkg;
           pkg.selected = false;
           pkg.selectedVersion = null;
@@ -163,18 +165,18 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.installedPackages.subscribe(pkgs => {
+      this.installedPackages.subscribe((pkgs) => {
         console.log('Selecting installed packages', pkgs);
         this.changes = new PackageChangeset();
         this.selection.select(...pkgs);
         if (this.dataSource && this.dataSource.hasData())
-          this.dataSource.data.forEach(pkg => {
+          this.dataSource.data.forEach((pkg) => {
             calcPackageDirty(pkg, true);
           });
       })
     );
 
-    this.translate.get('FLAGS.DETAILS').subscribe(translated => {
+    this.translate.get('FLAGS.DETAILS').subscribe((translated) => {
       this.flagDetails = translated;
     });
   }
@@ -191,7 +193,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
       );
 
       this.subscription.add(
-        this.dataSource.loading$.pipe(delay(0)).subscribe(loading => {
+        this.dataSource.loading$.pipe(delay(0)).subscribe((loading) => {
           this.isLoading = loading;
         })
       );
@@ -217,12 +219,12 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
       this.electron.remote.Menu.buildFromTemplate([
         {
           label: 'Open config file (external)',
-          click: this.tryOpenPackageConfig.bind(this)(pkg)
+          click: this.tryOpenPackageConfig.bind(this)(pkg),
         },
         {
           label: 'Edit config file (internal)',
-          click: this.tryEditConfig.bind(this)(pkg)
-        }
+          click: this.tryEditConfig.bind(this)(pkg),
+        },
       ]).popup();
     }
   }
@@ -243,7 +245,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       if (foundConfigFile !== undefined) {
-        this.electron.remote.shell.openItem(foundConfigFile);
+        this.electron.remote.shell.openPath(foundConfigFile);
       } else {
         this.electron.remote.dialog.showErrorBox(
           'File not found',
@@ -287,7 +289,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   isSelectionDirty = () => {
     if (!this.dataSource) return false;
-    return this.dataSource.filteredData.some(pkg => pkg.dirty);
+    return this.dataSource.filteredData.some((pkg) => pkg.dirty);
   };
 
   showColumnSelectMenu = () => {
@@ -295,7 +297,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
     this.electron.remote.Menu.buildFromTemplate(
       Object.keys(this.availableColumns).map<
         Electron.MenuItemConstructorOptions
-      >(colName => {
+      >((colName) => {
         const colInfo = this.availableColumns[colName];
         const { name } = colInfo;
         return {
@@ -306,12 +308,12 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
           click: () => {
             if (activeColumns.has(colName)) activeColumns.delete(colName);
             else activeColumns.add(colName);
-            this.displayedColumns = Object.keys(this.availableColumns).filter(
-              c => activeColumns.has(c)
-            );
+            this.displayedColumns = Object.keys(
+              this.availableColumns
+            ).filter((c) => activeColumns.has(c));
             this.prefs.set('displayedColumns', this.displayedColumns);
             this.changeDetector.detectChanges();
-          }
+          },
         };
       })
     ).popup();
@@ -339,7 +341,7 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSelectedVersionChange(pkg: SelectablePackage) {
-    this.changes.updated.forEach(ver => {
+    this.changes.updated.forEach((ver) => {
       if (ver.pkg.uuid4 === pkg.uuid4) {
         this.changes.updated.delete(ver);
       }
@@ -356,19 +358,19 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private selectAllDependencies(pkg: PackageVersion) {
     const toSelect: PackageVersionList = [];
-    pkg.dependencies.forEach(dep => {
+    pkg.dependencies.forEach((dep) => {
       dep.pkg.requiredBy.add(pkg);
 
       toSelect.push(dep);
     });
 
-    if (toSelect.length) this.selection.select(...toSelect.map(p => p.pkg));
+    if (toSelect.length) this.selection.select(...toSelect.map((p) => p.pkg));
   }
 
   private deselectAvailDependencies(pkg: PackageVersion) {
     const toDeselct: PackageVersionList = [];
 
-    pkg.dependencies.forEach(dep => {
+    pkg.dependencies.forEach((dep) => {
       const { requiredBy } = dep.pkg;
 
       requiredBy.delete(pkg);
@@ -377,14 +379,15 @@ export class PackageTableComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-    if (toDeselct.length) this.selection.deselect(...toDeselct.map(p => p.pkg));
+    if (toDeselct.length)
+      this.selection.deselect(...toDeselct.map((p) => p.pkg));
   }
 
   private loadColumnsFromPrefs = () => {
     const prefColumns = new Set(this.prefs.get('displayedColumns'));
     if (prefColumns.size) {
       this.displayedColumns = Object.keys(this.availableColumns).filter(
-        colName =>
+        (colName) =>
           this.availableColumns[colName].required || prefColumns.has(colName)
       );
     }

@@ -5,11 +5,11 @@ import { RenameProfileDialogComponent } from './rename-profile-dialog/rename-pro
 
 const routes: Routes = [
   { path: 'new-profile', component: NewProfileDialogComponent },
-  { path: 'rename-profile', component: RenameProfileDialogComponent }
+  { path: 'rename-profile', component: RenameProfileDialogComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class DialogsRoutingModule {}

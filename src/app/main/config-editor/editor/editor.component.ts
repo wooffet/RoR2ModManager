@@ -2,14 +2,14 @@ import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ConfigParserService,
-  ConfigMap
+  ConfigMap,
 } from '../services/config-parser.service';
 import { ConfigSectionComponent } from '../config-section/config-section.component';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
+  styleUrls: ['./editor.component.scss'],
 })
 export class EditorComponent implements OnInit {
   parsedConfig: ConfigMap;
@@ -36,26 +36,23 @@ export class EditorComponent implements OnInit {
 
   someSectionDirty() {
     if (this.sectionEditors) {
-      return this.sectionEditors.some(sec => sec.isDirty());
+      return this.sectionEditors.some((sec) => sec.isDirty());
     }
   }
 
   reset() {
-    this.sectionEditors.forEach(sec => sec.reset());
+    this.sectionEditors.forEach((sec) => sec.reset());
   }
 
   async saveChanges() {
-    const sectionValues: ConfigMap = this.sectionEditors.reduce(
-      (acc, sec) => {
-        acc[sec.section.name] = {
-          name: sec.section.name,
-          type: 'object',
-          value: sec.getValues()
-        };
-        return acc;
-      },
-      <ConfigMap>{}
-    );
+    const sectionValues: ConfigMap = this.sectionEditors.reduce((acc, sec) => {
+      acc[sec.section.name] = {
+        name: sec.section.name,
+        type: 'object',
+        value: sec.getValues(),
+      };
+      return acc;
+    }, <ConfigMap>{});
 
     // this.parser.serializeConfigMap(sectionValues);
     await this.parser.writeConfigMap(sectionValues, this.filename);

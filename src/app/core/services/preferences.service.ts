@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
   UserPreferences,
-  defaultConfig
+  defaultConfig,
 } from '../../../../electron/preferences.model';
 import { prefs } from '../../../../electron/prefs';
 import { Observable, Subject } from 'rxjs';

@@ -6,11 +6,11 @@ describe('ElectronService', () => {
   let remoteRequireSpy: jasmine.Spy;
 
   beforeAll(() => {
-    window.require = () => {};
+    window.require = () => { };
     const mockElectron = {
-      ipcRenderer: { on: () => {} },
+      ipcRenderer: { on: () => { } },
       webFrame: {},
-      remote: { require: () => {} }
+      remote: { require: () => { } }
     };
     remoteRequireSpy = spyOn(mockElectron.remote, 'require').and.returnValue(
       {}

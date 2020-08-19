@@ -22,7 +22,7 @@ import { ChangesTableComponent } from './changes-table/changes-table.component';
     StepOneComponent,
     StepTwoComponent,
     StepThreeComponent,
-    ChangesTableComponent
+    ChangesTableComponent,
   ],
   imports: [
     SharedModule,
@@ -30,7 +30,7 @@ import { ChangesTableComponent } from './changes-table/changes-table.component';
     MatSortModule,
     MatPaginatorModule,
     MatStepperModule,
-    DragDropModule
-  ]
+    DragDropModule,
+  ],
 })
 export class PackageSelectionModule {}

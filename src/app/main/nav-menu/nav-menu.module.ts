@@ -13,8 +13,8 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     LayoutModule,
     MatToolbarModule,
-    MatSidenavModule
+    MatSidenavModule,
   ],
-  exports: [NavMenuComponent]
+  exports: [NavMenuComponent],
 })
 export class NavMenuModule {}

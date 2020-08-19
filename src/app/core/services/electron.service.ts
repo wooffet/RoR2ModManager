@@ -7,7 +7,7 @@ import * as childProcess from 'child_process';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as unzipper from 'unzipper';
-import * as glob from 'glob';
+import glob from 'glob';
 
 export interface ConfirmBoxOptions {
   message: string;
@@ -52,24 +52,23 @@ export class ElectronService {
     }
   }
 
-  isElectron = () => {
-    return window && window.process && window.process.type;
-  };
+  isElectron = () => window && window.process && window.process.type;
 
   showMessageBox(
     opts: Electron.MessageBoxOptions,
-    callback?: (res: number, checked: boolean) => void
-  ) {
+    callback?: (res: number) => void
+  ): void | number {
     const win = this.remote.getCurrentWindow();
+    const msgBoxPromise = this.remote.dialog.showMessageBox(win, opts);
     if (callback) {
-      return this.remote.dialog.showMessageBox(win, opts, callback);
+      msgBoxPromise.then((returnValue) => callback(returnValue.response));
     } else {
-      return this.remote.dialog.showMessageBox(win, opts);
+      msgBoxPromise.then((returnValue) => returnValue.response);
     }
   }
 
-  glob = (pattern: string, opts?: glob.IOptions): Promise<string[]> => {
-    return new Promise((resolve, reject) => {
+  glob = (pattern: string, opts?: glob.IOptions): Promise<string[]> =>
+    new Promise((resolve, reject) => {
       this._glob(pattern, opts, (err, matches) => {
         if (err) {
           reject(err);
@@ -78,7 +77,6 @@ export class ElectronService {
         }
       });
     });
-  };
 
   showConfirmBox(
     opts: ConfirmBoxOptions,
@@ -89,20 +87,20 @@ export class ElectronService {
       title: 'Are you sure?',
       confirm: 'Yes',
       cancel: 'No',
-      type: 'question'
+      type: 'question',
     };
     const options = { ...defaultOpts, ...opts };
     const messageBoxOpts: Electron.MessageBoxOptions = {
       title: options.title,
       message: options.message,
       buttons: [options.confirm, options.cancel],
-      type: options.type
+      type: options.type,
     };
     if (callback) {
-      this.showMessageBox(messageBoxOpts, clicked => callback(clicked === 0));
+      this.showMessageBox(messageBoxOpts, (clicked) => callback(clicked === 0));
     } else {
-      const clicked = this.showMessageBox(messageBoxOpts);
-      return clicked === 0;
+      const result = this.showMessageBox(messageBoxOpts);
+      return result === 0;
     }
   }
 

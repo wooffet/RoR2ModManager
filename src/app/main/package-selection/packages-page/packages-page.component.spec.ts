@@ -19,13 +19,13 @@ import { ElectronService } from '../../../core/services/electron.service';
   selector: 'app-step-one',
   template: '<p>Mock Step One</p>'
 })
-class MockStepOneComponent {}
+class MockStepOneComponent { }
 
 @Component({
   selector: 'app-step-two',
   template: '<p>Mock Step Two</p>'
 })
-class MockStepTwoComponent {}
+class MockStepTwoComponent { }
 
 @Component({
   selector: 'app-step-three',

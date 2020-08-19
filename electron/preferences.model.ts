@@ -2,15 +2,13 @@ import { JSONSchema } from 'json-schema-typed';
 
 export interface UserPreferences {
   windowBounds: { width: number; height: number; x: number; y: number };
-  windowMaximized?: boolean;
-  darkMode?: boolean;
-  ror2_path?: string;
   respectPinned: boolean;
   humanizePackageNames: boolean;
   updatePackagesOnStart: boolean;
-
+  windowMaximized?: boolean;
+  darkMode?: boolean;
+  ror2_path?: string;
   appUpdateCheckInterval: number;
-
   displayedColumns: string[];
 }
 
@@ -24,42 +22,60 @@ interface Schema {
 export const preferencesSchema = <Schema>{
   windowBounds: {
     type: 'object',
-    width: {
-      type: 'number',
-      minimum: 0
+    properties: {
+      width: {
+        type: 'number',
+        minimum: 0,
+        default: 800,
+      },
+      height: {
+        type: 'number',
+        minimum: 0,
+        default: 600,
+      },
+      x: {
+        type: 'number',
+        minimum: 0,
+        default: 0,
+      },
+      y: {
+        type: 'number',
+        minimum: 0,
+        default: 0,
+      },
     },
-    height: {
-      type: 'number',
-      minimum: 0
-    },
-    x: {
-      type: 'number',
-      minimum: 0
-    },
-    y: {
-      type: 'number',
-      minimum: 0
-    }
+  },
+  respectPinned: {
+    type: 'boolean',
+    default: true,
+  },
+  humanizePackageNames: {
+    type: 'boolean',
+    default: true,
+  },
+  updatePackagesOnStart: {
+    type: 'boolean',
+    default: true,
   },
   windowMaximized: {
-    type: 'boolean'
+    type: 'boolean',
+  },
+  darkMode: {
+    type: 'boolean',
   },
   ror2_path: {
     type: 'string',
-    default: ''
-  },
-  darkMode: {
-    type: 'boolean'
+    default: '',
   },
   appUpdateCheckInterval: {
     type: 'number',
     minimum: 0,
-    default: 300
+    default: 300,
   },
   displayedColumns: {
     type: 'array',
-    default: []
-  }
+    default: [],
+  },
 };
 
 export const defaultConfig: UserPreferences = {
@@ -68,5 +84,5 @@ export const defaultConfig: UserPreferences = {
   humanizePackageNames: true,
   updatePackagesOnStart: true,
   appUpdateCheckInterval: 300,
-  displayedColumns: []
+  displayedColumns: [],
 };

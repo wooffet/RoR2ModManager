@@ -19,7 +19,7 @@ import { ElectronService } from '../../../core/services/electron.service';
   selector: 'markdown',
   template: '<ng-content></ng-content>'
 })
-class MockMarkdownComponent {}
+class MockMarkdownComponent { }
 
 describe('PackageDetailsComponent', () => {
   let component: PackageDetailsComponent;

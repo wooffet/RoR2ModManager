@@ -89,7 +89,7 @@ export const parseDependencyString = (str: string) => {
 export const deserializablePackageList = (
   serializedPackages: SerializedPackageList
 ): PackageList => {
-  const packages = serializedPackages.map(serializedPkg => {
+  const packages = serializedPackages.map((serializedPkg) => {
     let totalDownloads = 0;
     const pkg: Package = {
       dateCreated: new Date(serializedPkg.date_created),
@@ -104,7 +104,7 @@ export const deserializablePackageList = (
       totalDownloads: 0,
       uuid4: serializedPkg.uuid4,
       requiredBy: new Set(),
-      versions: serializedPkg.versions.map(v => {
+      versions: serializedPkg.versions.map((v) => {
         const ver: PackageVersion = {
           dateCreated: new Date(v.date_created),
           description: v.description,
@@ -118,7 +118,7 @@ export const deserializablePackageList = (
           uuid4: v.uuid4,
           version: new SemVer(v.version_number),
           websiteUrl: v.website_url,
-          dependencies: []
+          dependencies: [],
         };
         totalDownloads += ver.downloads;
         return ver;
@@ -128,13 +128,13 @@ export const deserializablePackageList = (
       },
       get flagsString(): string {
         return this.isPinned ? 'P' : '';
-      }
+      },
     };
 
     pkg.totalDownloads = totalDownloads;
     if (serializedPkg.installed_version !== undefined) {
       pkg.installedVersion = pkg.versions.find(
-        v => v.version.version === serializedPkg.installed_version
+        (v) => v.version.version === serializedPkg.installed_version
       );
     }
 
@@ -145,25 +145,27 @@ export const deserializablePackageList = (
     pkg.versions.forEach((ver, verIdx) => {
       ver.pkg = pkg;
       serializedPackages[pkgIdx].versions[verIdx].dependencies.forEach(
-        depString => {
+        (depString) => {
           const { owner, name, versionNumber } = parseDependencyString(
             depString
           );
           const depPkg = packages.find(
-            p => p.owner === owner && p.name === name
+            (p) => p.owner === owner && p.name === name
           );
           if (!depPkg) {
-            console.warn(`Could not find dependency ${depString} for package ${pkg.fullName}`);
+            console.warn(
+              `Could not find dependency ${depString} for package ${pkg.fullName}`
+            );
             return;
           }
-          const depVer = depPkg.versions.find(v =>
+          const depVer = depPkg.versions.find((v) =>
             satisfies(v.version, `~${versionNumber}`)
           );
 
           ver.dependencies.push(depVer);
         }
       );
-      ver.dependencies = ver.dependencies.filter(d => !!d);
+      ver.dependencies = ver.dependencies.filter((d) => !!d);
     });
   });
 
@@ -185,7 +187,7 @@ export const serializePackage = (pkg: Package): SerializedPackage => {
     versions: pkg.versions.map(
       (v): SerializedPackageVersion => ({
         date_created: v.dateCreated.toISOString(),
-        dependencies: v.dependencies.map(d => d.fullName),
+        dependencies: v.dependencies.map((d) => d.fullName),
         description: v.description,
         download_url: v.downloadUrl,
         downloads: v.downloads,
@@ -196,9 +198,9 @@ export const serializePackage = (pkg: Package): SerializedPackage => {
         readme: v.readme,
         uuid4: v.uuid4,
         version_number: v.version.version,
-        website_url: v.websiteUrl
+        website_url: v.websiteUrl,
       })
-    )
+    ),
   };
 
   if (pkg.installedVersion !== undefined) {
@@ -210,6 +212,5 @@ export const serializePackage = (pkg: Package): SerializedPackage => {
 
 export const serializePackageList = (
   packages: PackageList
-): SerializedPackageList => {
-  return packages.map((pkg): SerializedPackage => serializePackage(pkg));
-};
+): SerializedPackageList =>
+  packages.map((pkg): SerializedPackage => serializePackage(pkg));

@@ -6,7 +6,8 @@ import {
   MenuItemConstructorOptions,
   MenuItem,
   ipcMain,
-  Event
+  Event,
+  IpcMainEvent,
 } from 'electron';
 import { format as formatURL } from 'url';
 import openAboutWindow from 'about-window';
@@ -16,7 +17,7 @@ import { bugs } from '../package.json';
 
 const openRoR2Directory = (dir: string = '') => {
   const openPath = path.join(prefs.get('ror2_path') as string, dir);
-  return () => shell.openItem(openPath);
+  return () => shell.openPath(openPath);
 };
 
 const profiles: string[] = [];
@@ -25,20 +26,20 @@ let selectedProfile: string;
 const generateTemplate = (): MenuItemConstructorOptions[] => [
   {
     label: 'File',
-    submenu: [{ role: 'quit' }]
+    submenu: [{ role: 'quit' }],
   },
   {
     label: 'View',
     submenu: [
       { role: 'reload' },
-      { role: 'toggledevtools' },
+      { role: 'toggleDevTools' },
       { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
+      { role: 'resetZoom' },
+      { role: 'zoomIn' },
+      { role: 'zoomOut' },
       { type: 'separator' },
-      { role: 'togglefullscreen' }
-    ]
+      { role: 'togglefullscreen' },
+    ],
   },
   {
     label: 'Profile',
@@ -46,28 +47,28 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
       {
         label: 'Import',
         click: () =>
-          BrowserWindow.getFocusedWindow().webContents.send('importProfile')
+          BrowserWindow.getFocusedWindow().webContents.send('importProfile'),
       },
       {
         label: 'Export',
         click: () =>
-          BrowserWindow.getFocusedWindow().webContents.send('exportProfile')
+          BrowserWindow.getFocusedWindow().webContents.send('exportProfile'),
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         label: 'Rename Profile',
         click: (item: MenuItem, window: BrowserWindow) => {
           window.webContents.send('renameProfile');
-        }
+        },
       },
       {
         label: 'Delete Profile',
         enabled: profiles.length > 1,
         click: (item: MenuItem, window: BrowserWindow) => {
           window.webContents.send('deleteProfile');
-        }
+        },
       },
       { type: 'separator' },
       {
@@ -80,19 +81,19 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
               checked: p === selectedProfile,
               enabled: p !== selectedProfile,
               click: handleSwitchProfile,
-              id: p
+              id: p,
             })
-          )
-        ]
+          ),
+        ],
       },
       { type: 'separator' },
       {
         label: 'New Profile',
         click: (item: MenuItem, window: BrowserWindow) => {
           window.webContents.send('newProfile');
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
   {
     label: 'Directories',
@@ -104,25 +105,25 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
           { label: 'Main Directory', click: openRoR2Directory('BepInEx') },
           {
             label: 'Config Directory',
-            click: openRoR2Directory('BepInEx/config')
+            click: openRoR2Directory('BepInEx/config'),
           },
           {
             label: 'Plugins Directory',
-            click: openRoR2Directory('BepInEx/plugins')
-          }
-        ]
+            click: openRoR2Directory('BepInEx/plugins'),
+          },
+        ],
       },
       {
         label: 'Download Cache',
         click: () =>
-          shell.openItem(path.join(app.getPath('userData'), 'downloadCache'))
+          shell.openPath(path.join(app.getPath('userData'), 'downloadCache')),
       },
       {
         label: 'Temporary files',
         click: () =>
-          shell.openItem(path.join(app.getPath('temp'), app.getName()))
-      }
-    ]
+          shell.openPath(path.join(app.getPath('temp'), app.getName())),
+      },
+    ],
   },
   {
     role: 'help',
@@ -133,10 +134,10 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
           shell.openExternal(
             formatURL({
               pathname: bugs.url,
-              query: { template: 'bug_report.md', title: '[BUG]' }
+              query: { template: 'bug_report.md', title: '[BUG]' },
             })
           );
-        }
+        },
       },
       {
         label: 'Feature Request',
@@ -144,13 +145,13 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
           shell.openExternal(
             formatURL({
               pathname: bugs.url,
-              query: { template: 'feature_request.md', title: '[FEATURE]' }
+              query: { template: 'feature_request.md', title: '[FEATURE]' },
             })
           );
-        }
+        },
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
 
       {
@@ -161,13 +162,13 @@ const generateTemplate = (): MenuItemConstructorOptions[] => [
             package_json_dir: path.join(__dirname, '..'),
             win_options: {
               autoHideMenuBar: true,
-              webPreferences: { nodeIntegration: true }
-            }
+              webPreferences: { nodeIntegration: true },
+            },
           });
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  },
 ];
 
 function handleSwitchProfile(
@@ -198,17 +199,20 @@ const rebuildMenu = () => {
 export const configureApplicationMenu = () => {
   const menu = rebuildMenu();
 
-  ipcMain.on('addProfile', (event: Event, ...addedProfiles: string[]) => {
-    if (addedProfiles.length > 0) {
-      profiles.push(...addedProfiles);
-      if (!selectedProfile) selectedProfile = addedProfiles[0];
-      rebuildMenu();
+  ipcMain.on(
+    'addProfile',
+    (event: IpcMainEvent, ...addedProfiles: string[]) => {
+      if (addedProfiles.length > 0) {
+        profiles.push(...addedProfiles);
+        if (!selectedProfile) selectedProfile = addedProfiles[0];
+        rebuildMenu();
+      }
+
+      event.returnValue = profiles;
     }
+  );
 
-    event.returnValue = profiles;
-  });
-
-  ipcMain.on('removeProfile', (event: Event, profile: string) => {
+  ipcMain.on('removeProfile', (event: IpcMainEvent, profile: string) => {
     const profIndex = profiles.indexOf(profile);
     if (profIndex !== -1) {
       profiles.splice(profIndex, 1);
@@ -220,7 +224,7 @@ export const configureApplicationMenu = () => {
 
   ipcMain.on(
     'renameProfile',
-    (event: Event, oldName: string, newName: string) => {
+    (event: IpcMainEvent, oldName: string, newName: string) => {
       const profIndex = profiles.indexOf(oldName);
       if (profIndex !== -1) {
         profiles.splice(profIndex, 1, newName);
@@ -232,14 +236,14 @@ export const configureApplicationMenu = () => {
     }
   );
 
-  ipcMain.on('clearProfiles', (event: Event) => {
+  ipcMain.on('clearProfiles', (event: IpcMainEvent) => {
     profiles.splice(0, profiles.length);
     rebuildMenu();
 
     event.returnValue = profiles;
   });
 
-  ipcMain.on('switchProfile', (event: Event, profile: string) => {
+  ipcMain.on('switchProfile', (event: IpcMainEvent, profile: string) => {
     const currMenu = Menu.getApplicationMenu();
     const oldMenuItem = currMenu.getMenuItemById(selectedProfile);
     if (oldMenuItem) {

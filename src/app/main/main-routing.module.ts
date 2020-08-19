@@ -12,28 +12,31 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'packages'
+        redirectTo: 'packages',
       },
       {
         path: 'packages',
         pathMatch: 'full',
-        component: PackagesPageComponent
+        component: PackagesPageComponent,
       },
       {
         path: 'preferences',
         pathMatch: 'full',
-        component: PreferencesPageComponent
+        component: PreferencesPageComponent,
       },
       {
         path: 'config-editor',
-        loadChildren: () => import('./config-editor/config-editor.module').then(m => m.ConfigEditorModule)
-      }
-    ]
-  }
+        loadChildren: () =>
+          import('./config-editor/config-editor.module').then(
+            (m) => m.ConfigEditorModule
+          ),
+      },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class MainRoutingModule {}

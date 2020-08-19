@@ -12,7 +12,7 @@ class WebPrefsStore {
     const keyWatchers = this.watchers[key];
     if (Array.isArray(keyWatchers) && keyWatchers.length > 0) {
       const oldValue = this.get(key);
-      keyWatchers.forEach(watcher => watcher(value, oldValue));
+      keyWatchers.forEach((watcher) => watcher(value, oldValue));
     }
     localStorage.setItem(key, JSON.stringify(value));
   }

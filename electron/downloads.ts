@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron';
 import { PackageVersion } from '../src/app/core/models/package.model';
 
 export interface DownloadRegisterOptions {
@@ -17,17 +17,26 @@ export type DownloadState =
   | 'cancelled'
   | 'interrupted'
   | 'cached';
+
 export interface DownloadResultInfo {
   state: DownloadState;
   filePath: string;
 }
 
+export const registerDownloadManager = (
+  regOpts: DownloadRegisterOptions = {}
+) => {
+  app.on('browser-window-created', (event, win) => {
+    regsiterListener(win, regOpts);
+  });
+};
+
 const defaultRegsiterOpts: DownloadRegisterOptions = {
-  downloadPath: app.getPath('downloads')
+  downloadPath: app.getPath('downloads'),
 };
 
 const defaultDownloadOpts: DownloadOptions = {
-  useCache: true
+  useCache: true,
 };
 
 let registeredOptions: DownloadRegisterOptions = defaultRegsiterOpts;
@@ -42,69 +51,65 @@ const regsiterListener = (
   const { session } = win.webContents;
   session.setDownloadPath(registeredOptions.downloadPath);
 
-  session.on('will-download', handleWillDownload);
-
-  ipcMain.on('download-package', handleDownload);
-};
-
-export const registerDownloadManager = (
-  regOpts: DownloadRegisterOptions = {}
-) => {
-  app.on('browser-window-created', (event, win) => {
-    regsiterListener(win, regOpts);
+  session.on('will-download', (event, ...args) => {
+    handleWillDownload(event, args[0], args[1]);
   });
-};
 
-async function handleDownload(
-  event: Electron.Event,
-  pkg: PackageVersion,
-  downloadOpts?: DownloadOptions
-) {
-  if (!pkg) return;
-  const options = Object.assign({}, defaultDownloadOpts, downloadOpts);
-  const filePath = path.join(
-    registeredOptions.downloadPath,
-    `${pkg.fullName}.zip`
-  );
-  if (options.useCache && (await fs.pathExists(filePath))) {
-    console.log(
-      `${pkg.fullName}.zip already exists in cache, skipping download.`
+  ipcMain.on('download-package', (event, ...args) => {
+    handleDownload(event, args[0], args[1]);
+  });
+
+  async function handleDownload(
+    event: IpcMainEvent,
+    pkg: PackageVersion,
+    downloadOpts?: DownloadOptions
+  ) {
+    if (!pkg) return;
+    const options = Object.assign({}, defaultDownloadOpts, downloadOpts);
+    const filePath = path.join(
+      registeredOptions.downloadPath,
+      `${pkg.fullName}.zip`
     );
-    return sendDownloadComplete('cached', filePath, pkg, event.sender);
+    if (options.useCache && (await fs.pathExists(filePath))) {
+      console.log(
+        `${pkg.fullName}.zip already exists in cache, skipping download.`
+      );
+      return sendDownloadComplete('cached', filePath, pkg, event.sender);
+    }
+
+    downloads.set(pkg.fullName + '.zip', pkg);
+    event.sender.downloadURL(pkg.downloadUrl);
   }
 
-  downloads.set(pkg.fullName + '.zip', pkg);
-  event.sender.downloadURL(pkg.downloadUrl);
-}
+  function handleWillDownload(
+    downloadEvent: Electron.Event,
+    item: Electron.DownloadItem,
+    webContent: Electron.webContents
+  ) {
+    console.log(item.getFilename());
+    item.setSavePath(
+      path.join(registeredOptions.downloadPath, item.getFilename())
+    );
+    const pkg = downloads.get(item.getFilename());
+    const filePath = path.join(
+      registeredOptions.downloadPath,
+      item.getFilename()
+    );
+    item.on('done', (event, state) => {
+      sendDownloadComplete(state, filePath, pkg, webContent);
+    });
+  }
 
-function handleWillDownload(
-  downloadEvent: Electron.Event,
-  item: Electron.DownloadItem,
-  webContent: Electron.webContents
-) {
-  console.log(item.getFilename());
-  item.setSavePath(
-    path.join(registeredOptions.downloadPath, item.getFilename())
-  );
-  const pkg = downloads.get(item.getFilename());
-  const filePath = path.join(
-    registeredOptions.downloadPath,
-    item.getFilename()
-  );
-  item.on('done', (event, state) => {
-    sendDownloadComplete(state, filePath, pkg, webContent);
-  });
-}
-
-function sendDownloadComplete(
-  state: DownloadState,
-  filePath: string,
-  pkg: PackageVersion,
-  webContent: Electron.WebContents
-) {
-  const result: DownloadResultInfo = {
-    state,
-    filePath
-  };
-  webContent.send('download-complete', pkg, result);
-}
+  function sendDownloadComplete(
+    state: DownloadState,
+    filePath: string,
+    pkg: PackageVersion,
+    webContent: Electron.WebContents
+  ) {
+    const result: DownloadResultInfo = {
+      state,
+      filePath,
+    };
+    webContent.send('download-complete', pkg, result);
+  }
+};

@@ -26,7 +26,7 @@ export class ThemeService {
     const { classList } = this.overlay.getContainerElement();
     classList.add('mat-typography');
 
-    this.isDarkMode$.subscribe(isDarkMode => {
+    this.isDarkMode$.subscribe((isDarkMode) => {
       // doing it this way so adding more themes later should be easier
       this.prefs.set('darkMode', isDarkMode);
       const newThemeClass = isDarkMode ? 'app-dark-theme' : 'app-light-theme';

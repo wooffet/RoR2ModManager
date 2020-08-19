@@ -4,7 +4,7 @@ import {
   PackageVersion,
   Package,
   deserializablePackageList,
-  parseDependencyString
+  parseDependencyString,
 } from '../../core/models/package.model';
 import { DownloadService } from '../../core/services/download.service';
 import { ElectronService } from '../../core/services/electron.service';
@@ -72,7 +72,7 @@ export class PackageService {
     this.registerHttpProtocol();
 
     this.log$.next(new ReplaySubject<string>());
-    this.log$.subscribe(log => {
+    this.log$.subscribe((log) => {
       this.log = log;
     });
 
@@ -80,14 +80,14 @@ export class PackageService {
       this.downloadPackageList();
     } else {
       this.loadPackagesFromCache()
-        .then(packages => {
+        .then((packages) => {
           // if we didn't load any packages, download them
           if (!Array.isArray(packages) || packages.length === 0) {
             console.log('Package cache is empty, downloading list');
             this.downloadPackageList();
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
           this.downloadPackageList();
         });
@@ -104,7 +104,7 @@ export class PackageService {
     const packages = deserializablePackageList(serializedPackages);
 
     this.installedPackagesSource.next(
-      packages.filter(pkg => pkg.installedVersion)
+      packages.filter((pkg) => pkg.installedVersion)
     );
     this.allPackagesSource.next(packages);
 
@@ -117,7 +117,7 @@ export class PackageService {
     this.allPackagesSource.next(null);
 
     this.thunderstore.loadAllPackages().subscribe(
-      async packages => {
+      async (packages) => {
         if (packages) {
           await this.db.bulkUpdatePackages(packages);
           // be a little smarter about this maybe?
@@ -125,7 +125,7 @@ export class PackageService {
           this.allPackagesSource.next(newPackages);
         }
       },
-      err => {
+      (err) => {
         console.error('Failed to download packages');
         console.error(err);
         this.allPackagesSource.next(oldPackages);
@@ -161,12 +161,12 @@ export class PackageService {
     pkg.pkg.installedVersion = pkg;
 
     await this.db.updatePackage(pkg.pkg.uuid4, {
-      installed_version: pkg.version.version
+      installed_version: pkg.version.version,
     });
 
     this.installedPackagesSource.next([
       ...this.installedPackagesSource.value,
-      { ...pkg.pkg, installedVersion: pkg }
+      { ...pkg.pkg, installedVersion: pkg },
     ]);
 
     this.completeStep();
@@ -188,18 +188,18 @@ export class PackageService {
         ),
         this.electron.fs.remove(
           join(this.prefs.get('ror2_path'), 'doorstop_config.ini')
-        )
+        ),
       ]);
     } else {
       const installedPaths = [
         join(bepInExPath, 'plugins', pkg.fullName),
         join(bepInExPath, 'monomod', pkg.fullName),
-        join(bepInExPath, 'patchers', pkg.fullName)
+        join(bepInExPath, 'patchers', pkg.fullName),
         // join(bepInExPath, 'config', pkg.fullName) // uncomment to clean up config on uninstall
       ];
 
       await Promise.all(
-        installedPaths.map(path => this.electron.fs.remove(path))
+        installedPaths.map((path) => this.electron.fs.remove(path))
       );
     }
 
@@ -226,9 +226,9 @@ export class PackageService {
     console.log('Applying package changeset', changeset);
     this.log.next('Applying changes...');
     // Add packages that have an old version installed to remove list
-    changeset.updated.forEach(update => {
+    changeset.updated.forEach((update) => {
       const existing = this.installedPackagesSource.value.find(
-        pkg => pkg.uuid4 === update.uuid4
+        (pkg) => pkg.uuid4 === update.uuid4
       );
       if (existing !== undefined) {
         changeset.removed.add(existing);
@@ -242,7 +242,7 @@ export class PackageService {
     this.log.next('Uninstalling packages marked for removal...');
     // uninstall old packages
     const uuids = await Promise.all(
-      Array.from(changeset.removed).map(toRemove =>
+      Array.from(changeset.removed).map((toRemove) =>
         this.uninstallPackage(toRemove)
       )
     );
@@ -251,14 +251,14 @@ export class PackageService {
 
     this.installedPackagesSource.next(
       this.installedPackagesSource.value.filter(
-        installed => !uuids.includes(installed.uuid4)
+        (installed) => !uuids.includes(installed.uuid4)
       )
     );
 
     this.log.next('Installing packages...');
     // install new packages
     await Promise.all(
-      Array.from(changeset.updated).map(toInstall =>
+      Array.from(changeset.updated).map((toInstall) =>
         this.installPackage(toInstall)
       )
     );
@@ -281,7 +281,7 @@ export class PackageService {
     }
     const { name, owner, versionNumber } = parseDependencyString(depString);
     const foundPkg = this.allPackagesSource.value.find(
-      pkg => pkg.owner === owner && pkg.name === name
+      (pkg) => pkg.owner === owner && pkg.name === name
     );
     if (!foundPkg) {
       const err = new Error(`Could not find package for ${depString}`);
@@ -289,7 +289,7 @@ export class PackageService {
       throw err;
     }
     const foundVersion = foundPkg.versions.find(
-      ver => ver.version.version === versionNumber
+      (ver) => ver.version.version === versionNumber
     );
 
     if (!foundVersion) {
@@ -322,7 +322,7 @@ export class PackageService {
         glob('**/plugins/**/*', globOpts),
         glob('**/monomod/**/*', globOpts),
         glob('**/patchers/**/*', globOpts),
-        glob('**/config/**/*', globOpts)
+        glob('**/config/**/*', globOpts),
       ]);
       if (
         plugins.length === 0 &&
@@ -331,7 +331,7 @@ export class PackageService {
         config.length === 0
       ) {
         await fs.move(tmp_path, path.join(bepInExPath, 'plugins', pkgName), {
-          overwrite: true
+          overwrite: true,
         });
       } else {
         const moveFile = (
@@ -348,14 +348,14 @@ export class PackageService {
             relativePath
           );
           return fs.move(file, destPath, {
-            overwrite
+            overwrite,
           });
         };
         const promises = [
           plugins.map(moveFile('plugins')),
           monomod.map(moveFile('monomod')),
           patchers.map(moveFile('patchers')),
-          config.map(moveFile('config', false))
+          config.map(moveFile('config', false)),
         ];
         console.log(promises);
         await Promise.all(promises);
@@ -375,20 +375,20 @@ export class PackageService {
 
     const tmp_path = this.getTempPath('BepInExPack');
     // extract zip
-    this.log.next(`Extracting BepInEx...`);
+    this.log.next('Extracting BepInEx...');
     await this.extractZip(fileStream, tmp_path);
-    this.log.next(`Installing BepInEx...`);
+    this.log.next('Installing BepInEx...');
     try {
       const files = await glob('BepInExPack/**/*', {
         realpath: true,
         nodir: true,
-        cwd: tmp_path
+        cwd: tmp_path,
       });
       await Promise.all(
-        files.map(async file => {
+        files.map(async (file) => {
           const relativePath = file.slice((tmp_path + '/BepInExPack/').length);
           return fs.move(file, path.join(install_dir, relativePath), {
-            overwrite: true
+            overwrite: true,
           });
         })
       );
@@ -427,7 +427,7 @@ export class PackageService {
             provider,
             author,
             packageName,
-            version
+            version,
           ] = chunks.slice(2);
           if (
             protocolVersion === 'v1' &&
@@ -435,10 +435,10 @@ export class PackageService {
             provider === 'thunderstore.io'
           ) {
             const packageToInstall = this.allPackagesSource.value.find(
-              p => p.owner === author && p.name === packageName
+              (p) => p.owner === author && p.name === packageName
             );
             const versionToInstall = packageToInstall.versions.find(
-              v => v.version.version === version
+              (v) => v.version.version === version
             );
             console.log('Marking package for install', versionToInstall);
             this.selection.select(versionToInstall.pkg);
@@ -454,9 +454,7 @@ export class PackageService {
     this.stepsComplete += 1;
     if (this.stepsComplete > this.totalSteps)
       console.warn(
-        `More steps completed, than available. Completed ${
-          this.stepsComplete
-        }. Total ${this.totalSteps}`
+        `More steps completed, than available. Completed ${this.stepsComplete}. Total ${this.totalSteps}`
       );
     if (this.totalSteps > 0)
       this.applyPercentageSource.next(this.stepsComplete / this.totalSteps);

@@ -36,21 +36,18 @@ export class ProfileService {
     private router: Router,
     private ngZone: NgZone
   ) {
-    this.exportToFile = this.exportToFile.bind(this);
-    this.importFromFile = this.importFromFile.bind(this);
-
-    this.packages.allPackages$.subscribe(pkgs => {
+    this.packages.allPackages$.subscribe((pkgs) => {
       if (Array.isArray(pkgs) && pkgs.length > 0) {
         this.allPackages = pkgs;
       }
     });
 
-    this.packages.installedPackages$.subscribe(installed => {
+    this.packages.installedPackages$.subscribe((installed) => {
       if (this.activeProfileName && !this.pendingProfileSwitch) {
         this.db.updateProfile({
           name: this.activeProfileName,
-          packages: installed.map(pkg => pkg.installedVersion.fullName),
-          version: 1
+          packages: installed.map((pkg) => pkg.installedVersion.fullName),
+          version: 1,
         });
       }
     });
@@ -70,12 +67,12 @@ export class ProfileService {
     const profilesP = this.db.getProfiles();
     this.electron.ipcRenderer.sendSync('clearProfiles');
     const profiles = await profilesP;
-    profiles.forEach(profile => {
+    profiles.forEach((profile) => {
       this.profiles.set(profile.name, profile);
       this.electron.ipcRenderer.sendSync('addProfile', profile.name);
     });
 
-    this.profileNamesSource.next(profiles.map(p => p.name));
+    this.profileNamesSource.next(profiles.map((p) => p.name));
 
     this.activeProfileName = localStorage.getItem('activeProfile');
     if (!this.activeProfileName) {
@@ -83,7 +80,7 @@ export class ProfileService {
       await this.saveAndAddProfile({
         name: 'default',
         version: 1,
-        packages: []
+        packages: [],
       });
     }
     this.setActiveProfile();
@@ -123,14 +120,12 @@ export class ProfileService {
       this.electron.showMessageBox(
         {
           title: 'Are you sure?',
-          message: `Are you sure you want to delete profile '${
-            this.activeProfileName
-          }'`,
+          message: `Are you sure you want to delete profile '${this.activeProfileName}'`,
           type: 'question',
           buttons: ['Yes', 'No'],
-          defaultId: 1
+          defaultId: 1,
         },
-        clickedIndex => {
+        (clickedIndex) => {
           if (clickedIndex === 0) {
             this.deleteProfile(this.activeProfileName);
           }
@@ -142,7 +137,7 @@ export class ProfileService {
       const newName = await this.dialog.openDialog(
         {
           slug: 'rename-profile',
-          modal: true
+          modal: true,
         },
         this.activeProfileName
       );
@@ -153,28 +148,30 @@ export class ProfileService {
   }
 
   public showImportDialog() {
-    this.electron.remote.dialog.showOpenDialog(
-      this.electron.remote.getCurrentWindow(),
-      { filters: PROFILE_EXTENSIONS },
-      this.importFromFile
-    );
+    this.electron.remote.dialog
+      .showOpenDialog(this.electron.remote.getCurrentWindow(), {
+        filters: PROFILE_EXTENSIONS,
+      })
+      .then((result) => {
+        this.importFromFile(result.filePaths);
+      });
   }
 
   public showExportDialog() {
-    this.electron.remote.dialog.showSaveDialog(
-      this.electron.remote.getCurrentWindow(),
-      {
-        filters: PROFILE_EXTENSIONS
-      },
-      this.exportToFile
-    );
+    this.electron.remote.dialog
+      .showSaveDialog(this.electron.remote.getCurrentWindow(), {
+        filters: PROFILE_EXTENSIONS,
+      })
+      .then((result) => {
+        this.exportToFile(result.filePath);
+      });
   }
 
   public createProfile(opts: CreateProfileOptions) {
     const profile: PackageProfile = {
       name: opts.name,
       version: 1,
-      packages: []
+      packages: [],
     };
     if (opts.copyFrom) {
       const original = this.profiles.get(opts.copyFrom);
@@ -191,7 +188,7 @@ export class ProfileService {
     this.profiles.set(profile.name, profile);
     this.profileNamesSource.next([
       ...this.profileNamesSource.value,
-      profile.name
+      profile.name,
     ]);
     this.electron.ipcRenderer.sendSync('addProfile', profile.name);
     await promise;
@@ -230,7 +227,7 @@ export class ProfileService {
     }
     await Promise.all([
       this.db.deleteProfile(oldName),
-      this.db.updateProfile(profile)
+      this.db.updateProfile(profile),
     ]);
   }
 
@@ -258,7 +255,7 @@ export class ProfileService {
       {
         slug: 'new-profile',
         width: 300,
-        height: 300
+        height: 300,
       },
       this.profileNamesSource.value
     );
@@ -273,7 +270,7 @@ export class ProfileService {
 
     try {
       packages = profile.packages
-        .map(dep => {
+        .map((dep) => {
           try {
             return this.packages.findPackageFromDependencyString(dep);
           } catch (err) {
@@ -285,7 +282,7 @@ export class ProfileService {
             }
           }
         })
-        .filter(p => p); // remove false elements
+        .filter((p) => p); // remove false elements
     } catch (err) {
       errors = [err.message || err];
     }
@@ -295,13 +292,13 @@ export class ProfileService {
         title: 'Error',
         type: 'error',
         buttons: ['Ok'],
-        message: errors.join('\n')
+        message: errors.join('\n'),
       });
       return;
     }
 
     this.packages.selection.clear();
-    packages.forEach(pkg => {
+    packages.forEach((pkg) => {
       this.packages.selection.select(pkg.pkg);
     });
 
@@ -328,10 +325,10 @@ export class ProfileService {
           title: 'Confirm Overwrite',
           message:
             `A profile with name '${profile.name}' already exists.\n` +
-            `Do you want to overwrite existing profile?`,
+            'Do you want to overwrite existing profile?',
           buttons: ['Yes', 'No'],
           defaultId: 1,
-          type: 'question'
+          type: 'question',
         });
         // user clicked yes
         if (clicked === 1) {
@@ -354,7 +351,7 @@ export class ProfileService {
           title: 'Error',
           type: 'error',
           buttons: ['Ok'],
-          message
+          message,
         },
         () => {}
       );
@@ -364,13 +361,13 @@ export class ProfileService {
   private async exportToFile(filename: string) {
     if (filename === undefined) return;
     const installed = this.allPackages
-      .filter(p => p.installedVersion)
-      .map(p => p.installedVersion.fullName);
+      .filter((p) => p.installedVersion)
+      .map((p) => p.installedVersion.fullName);
 
     const profile: PackageProfile = {
       name: this.electron.path.basename(filename, DEFAULT_PROFILE_EXTENSION),
       version: 1,
-      packages: installed
+      packages: installed,
     };
     try {
       await this.electron.fs.remove(filename);

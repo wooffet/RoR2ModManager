@@ -31,7 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatExpansionModule,
     MatTableModule,
-    MatSelectModule
-  ]
+    MatSelectModule,
+  ],
 })
 export class MaterialModule {}

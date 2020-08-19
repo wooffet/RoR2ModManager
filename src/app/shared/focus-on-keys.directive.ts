@@ -2,7 +2,7 @@ import { Directive, ElementRef, Input, OnInit, OnDestroy } from '@angular/core';
 import * as Mousetrap from 'mousetrap';
 
 @Directive({
-  selector: '[appFocusOnKeys]'
+  selector: '[appFocusOnKeys]',
 })
 export class FocusOnKeysDirective implements OnInit, OnDestroy {
   @Input('appFocusOnKeys') keyCombo: string | string[];

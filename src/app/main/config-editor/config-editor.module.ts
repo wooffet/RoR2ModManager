@@ -8,8 +8,12 @@ import { ConfigParserService } from './services/config-parser.service';
 import { ConfigSectionComponent } from './config-section/config-section.component';
 
 @NgModule({
-  declarations: [FoundConfigTableComponent, EditorComponent, ConfigSectionComponent],
+  declarations: [
+    FoundConfigTableComponent,
+    EditorComponent,
+    ConfigSectionComponent,
+  ],
   imports: [SharedModule, ConfigEditorRoutingModule],
-  providers: [ConfigParserService]
+  providers: [ConfigParserService],
 })
 export class ConfigEditorModule {}

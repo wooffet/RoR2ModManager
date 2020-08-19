@@ -16,7 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
     ReactiveFormsModule,
     FocusOnKeysDirective,
     HumanizePipe,
-    TranslateModule
-  ]
+    TranslateModule,
+  ],
 })
 export class SharedModule {}

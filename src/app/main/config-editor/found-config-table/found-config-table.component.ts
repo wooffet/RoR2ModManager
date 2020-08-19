@@ -11,7 +11,7 @@ interface ConfigFile {
 @Component({
   selector: 'app-found-config-table',
   templateUrl: './found-config-table.component.html',
-  styleUrls: ['./found-config-table.component.scss']
+  styleUrls: ['./found-config-table.component.scss'],
 })
 export class FoundConfigTableComponent implements OnInit {
   configFiles: ConfigFile[] = [];
@@ -27,8 +27,8 @@ export class FoundConfigTableComponent implements OnInit {
     const matches = await this.electron.glob(
       `${this.prefs.get('ror2_path')}/BepInEx/config/*.cfg`
     );
-    this.configFiles = matches.map(file => ({
-      filename: this.electron.path.basename(file)
+    this.configFiles = matches.map((file) => ({
+      filename: this.electron.path.basename(file),
     }));
     this.ngZone.run(() => this.changeDetector.detectChanges());
   }

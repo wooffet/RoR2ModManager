@@ -7,7 +7,7 @@ import {
   ViewChildren,
   QueryList,
   Output,
-  EventEmitter
+  EventEmitter,
 } from '@angular/core';
 import { ConfigMap, ConfigMapValue } from '../services/config-parser.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-config-section',
   templateUrl: './config-section.component.html',
-  styleUrls: ['./config-section.component.scss']
+  styleUrls: ['./config-section.component.scss'],
 })
 export class ConfigSectionComponent implements OnInit, OnChanges {
   @Input() section: ConfigMapValue;
@@ -65,7 +65,7 @@ export class ConfigSectionComponent implements OnInit, OnChanges {
   }
 
   isDirty(): boolean {
-    return this.form.dirty || this.childSections.some(sec => sec.form.dirty);
+    return this.form.dirty || this.childSections.some((sec) => sec.form.dirty);
   }
 
   getValues(): ConfigMap {
@@ -75,7 +75,7 @@ export class ConfigSectionComponent implements OnInit, OnChanges {
         description: field.description,
         name: field.name,
         type: field.type,
-        value: this.form.get(field.name).value
+        value: this.form.get(field.name).value,
       };
     }
 
@@ -84,7 +84,7 @@ export class ConfigSectionComponent implements OnInit, OnChanges {
         name: sec.section.name,
         type: 'object',
         description: sec.section.description,
-        value: sec.getValues()
+        value: sec.getValues(),
       };
       return acc;
     }, values);
@@ -100,6 +100,6 @@ export class ConfigSectionComponent implements OnInit, OnChanges {
 
     this.form.reset(pristineValues);
 
-    this.childSections.forEach(sec => sec.reset());
+    this.childSections.forEach((sec) => sec.reset());
   }
 }

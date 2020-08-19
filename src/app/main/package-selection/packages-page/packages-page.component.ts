@@ -3,7 +3,7 @@ import {
   OnInit,
   ViewChild,
   OnDestroy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { StepOneComponent } from './step-one/step-one.component';
@@ -19,13 +19,16 @@ import { ElectronService } from '../../../core/services/electron.service';
   templateUrl: './packages-page.component.html',
   styleUrls: ['./packages-page.component.scss'],
   host: {
-    style: 'display:flex;flex-direction:column;flex-grow:1;'
-  }
+    style: 'display:flex;flex-direction:column;flex-grow:1;',
+  },
 })
 export class PackagesPageComponent implements OnInit, OnDestroy {
-  @ViewChild(StepOneComponent, { static: true }) stepOneComponent: StepOneComponent;
-  @ViewChild(StepTwoComponent, { static: true }) stepTwoComponent: StepTwoComponent;
-  @ViewChild(StepThreeComponent, { static: true }) stepThreeComponent: StepThreeComponent;
+  @ViewChild(StepOneComponent, { static: true })
+  stepOneComponent: StepOneComponent;
+  @ViewChild(StepTwoComponent, { static: true })
+  stepTwoComponent: StepTwoComponent;
+  @ViewChild(StepThreeComponent, { static: true })
+  stepThreeComponent: StepThreeComponent;
   @ViewChild(MatStepper, { static: true }) stepper: MatStepper;
 
   editable = true;
@@ -55,12 +58,12 @@ export class PackagesPageComponent implements OnInit, OnDestroy {
             {
               title: 'Cancel Pending Switch?',
               message:
-                `Do you want to cancel the pending change to profile` +
+                'Do you want to cancel the pending change to profile' +
                 `'${this.profile.pendingProfileName}'?`,
               buttons: ['Yes', 'No'],
-              type: 'question'
+              type: 'question',
             },
-            clickedIndex => {
+            (clickedIndex) => {
               if (clickedIndex === 0) {
                 this.canceled();
               }

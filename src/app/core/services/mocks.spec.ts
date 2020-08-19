@@ -37,9 +37,9 @@ export class MockHttpClient {
   get() {
     return of();
   }
-  post() {}
-  delete() {}
-  put() {}
+  post() { }
+  delete() { }
+  put() { }
 }
 
 export class MockThemeService {
@@ -82,39 +82,37 @@ export class MockPackageService {
     );
   }
 
-  public updatePackage(pkg: Package, version: PackageVersion) {}
+  public updatePackage(pkg: Package, version: PackageVersion) { }
 
-  public findPackageFromDependencyString() {}
-  public installProfile() {}
+  public findPackageFromDependencyString() { }
+  public installProfile() { }
 }
 
 export class MockElectronService {
   ipcRenderer = {
-    on: () => {},
-    send: () => {},
-    sendTo: () => {},
-    removeListener: () => {}
+    on: () => { },
+    send: () => { },
+    sendTo: () => { },
+    removeListener: () => { }
   };
   remote = {
     dialog: {
-      showOpenDialog: (options: object) => {
-        return ['C:\\fakepath'];
-      },
-      showMessageBox: () => {},
-      showSaveDialog: () => {}
+      showOpenDialog: (options: object) => ['C:\\fakepath'],
+      showMessageBox: () => { },
+      showSaveDialog: () => { }
     },
     require: (module: string) => ({}),
-    getCurrentWindow: () => {}
+    getCurrentWindow: () => { }
   };
   fs = {
-    createWriteStream: () => {},
-    createReadStream: () => {},
-    readJson: () => {},
-    writeJson: () => {},
-    access: () => {}
+    createWriteStream: () => { },
+    createReadStream: () => { },
+    readJson: () => { },
+    writeJson: () => { },
+    access: () => { }
   };
   protocol = {
-    registerHttpProtocol: () => {}
+    registerHttpProtocol: () => { }
   };
   path = path;
   isElectron() {
@@ -123,7 +121,7 @@ export class MockElectronService {
   glob() {
     return [];
   }
-  showMessageBox() {}
+  showMessageBox() { }
 }
 
 export class MockDownloadService {
@@ -144,14 +142,14 @@ export class MockThunderstoreService {
 export class MockProfileService {
   confirmProfile = new Subject<void>();
 
-  registerMenuHandlers() {}
+  registerMenuHandlers() { }
 }
 
 @Component({
   selector: 'app-nav-menu',
   template: '<ng-content></ng-content>'
 })
-export class MockNavMenuComponent {}
+export class MockNavMenuComponent { }
 
 export class MockWebContents {
   constructor() {
@@ -168,32 +166,32 @@ export class MockBrowserWindow {
     if (!this.parent) this.parent = new MockBrowserWindow();
     return this.parent;
   }
-  focus() {}
-  close() {}
+  focus() { }
+  close() { }
 }
 
 export class MockConfigParserService {
-  parseFile() {}
+  parseFile() { }
 }
 
 export class MockDatabaseService {
-  public saveProfile(profile: PackageProfile) {}
+  public saveProfile(profile: PackageProfile) { }
 
-  public updateProfile(profile: PackageProfile) {}
+  public updateProfile(profile: PackageProfile) { }
 
-  public getProfiles() {}
+  public getProfiles() { }
 
-  public deleteProfile(profile: string) {}
+  public deleteProfile(profile: string) { }
 }
 
 export class MockDialogService {
   public dialogInput = new Subject<any>();
-  public async openDialog() {}
-  public dialogReady() {}
-  public closeDialog() {}
+  public async openDialog() { }
+  public dialogReady() { }
+  public closeDialog() { }
 }
 
 @Pipe({ name: 'translate' })
 export class MockTranslatePipe implements PipeTransform {
-  transform() {}
+  transform() { }
 }

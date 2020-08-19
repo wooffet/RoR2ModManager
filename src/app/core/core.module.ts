@@ -15,7 +15,7 @@ import { DatabaseService } from './services/database.service';
     ThunderstoreService,
     PreferencesService,
     DownloadService,
-    DatabaseService
-  ]
+    DatabaseService,
+  ],
 })
 export class CoreModule {}

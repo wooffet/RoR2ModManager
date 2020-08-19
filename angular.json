@@ -82,7 +82,7 @@
               "browserTarget": "ror2-mod-manager:build:dev"
             },
             "production": {
-              "browserTarget": "ror2-mod-manager:build:production"
+              "browserTarget": "ror2-mod-manager:build:prod"
             },
             "web": {
               "browserTarget": "ror2-mod-manager:build:web"
@@ -121,10 +121,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
-            "exclude": ["**/node_modules/**", "**.json"]
+            "eslintConfig": ".eslintrc.js",
+            "tsConfig": ["src/tsconfig.app.json"],
+            "exclude": ["**/node_modules/**", "**.json", "src/*.html", "src/**/*.html"]
           }
         }
       }
@@ -134,10 +135,11 @@
       "projectType": "application",
       "architect": {
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
+            "eslintConfig": ".eslintrc.js",
             "tsConfig": ["e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**"]
+            "exclude": ["**/node_modules/**", "**.json", "src/*.html", "src/**/*.html"]
           }
         }
       }

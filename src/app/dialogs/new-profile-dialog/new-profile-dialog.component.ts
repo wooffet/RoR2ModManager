@@ -3,7 +3,7 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormGroupDirective
+  FormGroupDirective,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { DialogService } from '../services/dialog.service';
@@ -11,7 +11,7 @@ import { DialogService } from '../services/dialog.service';
 @Component({
   selector: 'app-new-profile-dialog',
   templateUrl: './new-profile-dialog.component.html',
-  styleUrls: ['./new-profile-dialog.component.scss']
+  styleUrls: ['./new-profile-dialog.component.scss'],
 })
 export class NewProfileDialogComponent implements OnInit {
   @ViewChild('profileForm', { static: true }) formElem: FormGroupDirective;
@@ -24,12 +24,12 @@ export class NewProfileDialogComponent implements OnInit {
   ngOnInit() {
     this.form = this.fb.group({
       name: ['', Validators.required],
-      copyFrom: ''
+      copyFrom: '',
     });
 
     this.dialog.dialogReady();
 
-    this.dialog.dialogInput.subscribe(profiles => {
+    this.dialog.dialogInput.subscribe((profiles) => {
       this.profiles = profiles;
     });
   }

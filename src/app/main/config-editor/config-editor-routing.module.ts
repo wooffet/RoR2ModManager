@@ -7,16 +7,16 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: FoundConfigTableComponent
+    component: FoundConfigTableComponent,
   },
   {
     path: ':file',
-    component: EditorComponent
-  }
+    component: EditorComponent,
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class ConfigEditorRoutingModule {}

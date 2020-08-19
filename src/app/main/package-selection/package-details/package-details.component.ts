@@ -4,7 +4,7 @@ import { PreferencesService } from '../../../core/services/preferences.service';
 import { Subscription } from 'rxjs';
 import {
   PackageService,
-  SelectablePackage
+  SelectablePackage,
 } from '../../services/package.service';
 import { ElectronService } from '../../../core/services/electron.service';
 import { PackageTableComponent } from '../package-table/package-table.component';
@@ -12,7 +12,7 @@ import { PackageTableComponent } from '../package-table/package-table.component'
 @Component({
   selector: 'app-package-details',
   templateUrl: './package-details.component.html',
-  styleUrls: ['./package-details.component.scss']
+  styleUrls: ['./package-details.component.scss'],
 })
 export class PackageDetailsComponent implements OnInit, OnDestroy {
   @Input() table: PackageTableComponent;
@@ -32,13 +32,13 @@ export class PackageDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription.add(
-      this.prefs.onChange('humanizePackageNames').subscribe(event => {
+      this.prefs.onChange('humanizePackageNames').subscribe((event) => {
         this.shouldHumanize = event.newValue;
       })
     );
 
     this.subscription.add(
-      this.packages.selectedPackage.subscribe(pkg => {
+      this.packages.selectedPackage.subscribe((pkg) => {
         this.package = pkg;
         this.packageVersion = pkg && pkg.latestVersion;
       })
