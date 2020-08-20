@@ -15,6 +15,8 @@ import './electron/autoUpdate';
 import { log } from 'electron-log';
 
 app.setAppUserModelId('com.electron.ror2modmanager');
+// TODO: temp fix for electron v9 as websucurity:false is enabling CORS for requests
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 registerIpcListeners();
 registerDownloadManager({

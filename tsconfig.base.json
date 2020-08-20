@@ -18,9 +18,9 @@
     "src/main.ts",
     "src/polyfills.ts"
   ],
-   "include": ["main.ts", "src/**/*", "electron/**/*"],
-  // "include": [
-  //   "src/**/*.d.ts"
-  // ],
+  //  "include": ["main.ts", "src/**/*"],
+  "include": [
+    "src/**/*.d.ts"
+  ],
   "exclude": ["node_modules"]
 }

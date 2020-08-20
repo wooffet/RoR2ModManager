@@ -11,6 +11,6 @@
     "types": ["node"],
     "lib": ["es2017", "es2016", "es2015", "dom"]
   },
-  "include": ["main.ts", "electron/**/*"],
+  "include": ["main.ts"],
   "exclude": ["node_modules", "**/*.spec.ts"]
 }
